@@ -1,0 +1,196 @@
+<%- include ('./partials/adminHeader'); -%>
+
+
+<!-- For SUccess or Error -->
+<!-- <div class="container w-25 mt-3">
+   include ('./partials/SuccessError');
+</div>  -->
+
+<div class="container mt-2">
+    <nav aria-label="breadcrumb mt-5">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Admin</li>
+        <li class="breadcrumb-item"><a href="/history">History</a></li>
+        <li class="breadcrumb-item active" aria-current="page">All Leaves</li>
+      </ol>
+    </nav>
+</div>
+<div class="container mt-4">
+  <!-- <nav class="navbar bg-secondary navbar-expand-sm d-flex justify-content-center">
+    <h2 class="text-white fs-2">
+      View All Leaves
+    </h2>
+  </nav> -->
+  <div class="row mt-4 mb-4">
+    <div class="mb-3 w-25">
+      <label for="selectUser" class="">Select User</label>
+      <select
+        id="selectUser"
+        class="form-select"
+        aria-label="Default select example"
+      >
+        <option selected>All</option>
+      </select>
+    </div>
+    <!-- <div class="mb-3 w-25">
+      <label for="startDate" class="">Start Date</label>
+      <input type="date" class="form-control" id="startDate" name="startDate" />
+    </div>
+    <div class="mb-3 w-25">
+      <label for="endDate" class="">End Date</label>
+      <input type="date" class="form-control" id="endDate" name="endDate" />
+    </div> -->
+    <button type="button" id="search" class="btn btn-info text-white w-25 h-25 mt-4">
+      Search
+    </button>
+  </div>
+  <table class="mb-5" id="leaveTable">
+    <thead>
+      <tr>
+        <th scope="col">No.</th>
+        <th scope="col">Username</th>
+        <th scope="col">Full Day or Half Day</th>
+        <th scope="col">Date of Leave</th>
+        <th scope="col">First Half or Second Half</th>
+        <th scope="col">Leave Type</th>
+        <th scope="col">Reason</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+  <!-- <div class="mt-5 mb-5">
+    <button id="csvBtn" class="btn btn-secondary" onclick="prepareForCSV()">Export CSV</button>
+    <a href="#" class="btn btn-secondary">Export Excel</a>
+  </div> -->
+</div>
+
+
+<script>
+    $(document).ready(function () {
+    //Built in Table
+    $("#leaveTable").DataTable({ searching: false, paging: false, scrollY: 500, info: false });
+
+    var selectedUser = 'All';
+    // var fromDate = '';
+    // var toDate   = '';
+    getRequestforAllLeaves(selectedUser);
+    
+    //Search button Event
+    $("#search").on("click", function (e) {
+      
+        selectedUser = $("#selectUser").val();
+        // fromDate = $("#startDate").val();
+        // toDate = $("#endDate").val();
+        
+        getRequestforAllLeaves(selectedUser);
+        
+      });
+
+
+    getRequestforUniqueEmployee();  
+
+    });
+
+
+   //Get All Unique Employee
+   function getRequestforUniqueEmployee()
+  { 
+    $.ajax({
+    url: "/history/allUniqueEmployees",
+    type: "GET",
+    success: function (data) {
+
+      //distinct(Unique or Prevent to repeate username) 
+      // var flags = [], output = [], l = data.length, i;
+      for( i=0; i<data.length; i++) {
+          // if( flags[data[i].username]) continue;
+          // flags[data[i].username] = true;
+          var option = `<option>${data[i]}</option>`;
+          $("#selectUser").append(option);
+        }
+    },
+   });
+  }
+
+  
+
+
+   //Get All Leaves
+  function getRequestforAllLeaves(selectedUser)
+  { 
+    $.ajax({
+    url: "/history/allLeaves?selectedUser="+selectedUser,
+    type: "GET",
+    success: function (data) {
+    //   console.log(data);
+
+      var count = 1;
+      var _html = "";
+      data.forEach(function (item) {
+        
+        if(item.leaveDate != undefined)
+        {
+            let dateOfLeave = new Date(item.leaveDate).toUTCString();
+            let LeaveD = dateOfLeave.slice(0, 17);
+
+            _html += `
+                    <tr>
+                    <td>${count}</td>
+                    <td>${item.username}</td>
+                    <td>${item.HalfDayorFullDay}</td>
+                    <td>${LeaveD} / ${item.leaveTime}</td>
+                    <td>${item.firstSecondHalf}</td>
+                    <td>${item.leaveType}</td>
+                    <td>${item.reason}</td>
+                    </tr>
+                `;
+            count++;
+        }
+        else if(item.startDate != undefined)
+        {
+            let sDate = new Date(item.startDate).toUTCString();
+            let eDate = new Date(item.endDate).toUTCString();
+            let start = sDate.slice(0, 17);
+            let end = eDate.slice(0, 17);
+
+            _html += `
+                    <tr>
+                    <td>${count}</td>
+                    <td>${item.username}</td>
+                    <td>${item.HalfDayorFullDay}</td>
+                    <td>${start} - ${end}</td>
+                    <td>Full Day</td>
+                    <td>${item.leaveType}</td>
+                    <td>${item.reason}</td>
+                    </tr>
+                `;
+            count++;
+        }
+      });
+
+      if(_html == "")
+      {
+          _html = `<tr>
+                      <td>-</td>
+                      <td>-</td>
+                      <td>No Leave to Show</td>
+                      <td>-</td>
+                      <td>-</td>
+                      <td>-</td>
+                      <td>-</td>
+                  </tr>`;
+      }
+      
+      $("#tableBody").html(_html);
+
+    },
+  });
+}
+
+
+
+</script>
+
+
+
+<%- include ('./partials/adminFooter'); -%>

@@ -1,0 +1,23 @@
+<!-- <div class="container w-25"> -->
+    <% if(error && error.length > 0) { %>
+        <div id="err" class="alert alert-danger" role="alert">
+            <%= error %>
+            <!-- <% error.forEach(function(err){ %>
+              <%= err %>
+            <% }) %> -->
+        </div>
+    <% } %>
+    <% if(success && success.length > 0) { %>
+        <div id="err" class="alert alert-success" role="alert">
+            <%= success %>
+        </div>
+    <% } %>
+  <!-- </div> -->
+
+
+  
+ <script>
+    setTimeout(function() {
+        $('#err').hide();
+      }, 2000);
+ </script>

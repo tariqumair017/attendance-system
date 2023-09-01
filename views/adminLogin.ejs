@@ -1,0 +1,48 @@
+<%-  include ('./partials/header');  -%>
+
+ <!-- For SUccess or Error -->
+ <div class="container w-25 mt-3">
+ <%- include ('./partials/SuccessError'); -%>
+</div>
+
+
+<div class="row">
+  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3"></div>
+  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+      <div class="container404"> 
+      <h2 class="text-white mb-4">WELCOME TO EEZAHTECH</h2>
+      <h3 class="text-white">Admin Login</h3> 
+          <form class="w-50 mt-3" id="myForm" action="/admin-login" method="post">
+            <div class="mb-3">
+              <!-- <label for="exampleInputEmail1" class="form-label">Email</label> -->
+              <input type="email" class="form-control" id="email" name="username" aria-describedby="emailHelp" placeholder="Email" required>
+            </div>
+            <div class="mb-3">
+              <!-- <label for="exampleInputPassword1" class="form-label">Password</label> -->
+              <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+              <label class="text-white" for="showPasswordCheckbox"><input type="checkbox" id="showPasswordCheckbox" onclick="showPassword()">Show Password</label>
+            </div>
+            <div class="mb-3">
+              <button id="loginBtn" type="submit" class="btn btn-primary">Login</button>
+            </div> 
+          </form>
+      </div>
+  </div>
+  <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3"></div>
+</div> 
+
+<script>
+    function showPassword()
+    {
+      var x = document.getElementById("password");
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
+      }
+    }
+</script>
+
+
+<%-  include ('./partials/footer');  -%>
+

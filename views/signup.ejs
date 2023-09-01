@@ -1,0 +1,135 @@
+<%-  include ('./partials/header');  -%>
+
+<div class="row">
+    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3"></div>
+    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6"> 
+        <div class="container404 mt-2"> 
+        <h2 class="text-white mb-4">Register</h2> 
+        <!-- For SUccess or Error -->
+        <div class="container w-75">
+            <%- include ('./partials/SuccessError'); -%>
+        </div>
+        <!-- <p id="errorP" class="text-danger"></p>  -->
+        <form class="text-white" action="/signup" method="post"> 
+            <div class="mb-3">
+                <!-- <label for="exampleInputEmail1" class="form-label">First Name</label> -->
+                <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name" autocomplete="off" required>
+            </div>
+            <div class="mb-3">
+                <!-- <label for="exampleInputPassword1" class="form-label">Last Name</label> -->
+                <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name" autocomplete="off" required>
+            </div>
+            <div class="mb-3">
+                <label for="dateofjoin" class="form-label">Date of Joining</label>
+                <input type="datetime-local" class="form-control" id="dateofjoin" name="dateofjoin" placeholder="Date of Joining" required>
+            </div>
+            <div class="mb-3">
+                <!-- <label for="exampleInputPassword1" class="form-label">Last Name</label> -->
+                <input type="text" class="form-control" id="designation" name="designation" placeholder="Designation" autocomplete="off" required>
+            </div>
+            <div class="mb-3">
+              <!-- <label for="exampleInputEmail1" class="form-label">Email</label> -->
+              <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.com$" placeholder="Email" autocomplete="off" required>
+            </div>
+            <div class="mb-3">
+                <!-- <label for="exampleInputEmail1" class="form-label">Email</label> -->
+                <input type="text" class="form-control" id="username" name="username" placeholder="User ID (only num)"  onkeypress='return restrictAlphabets(event)' autocomplete="off" required>
+            </div>
+            <div class="mb-3">
+              <!-- <label for="exampleInputPassword1" class="form-label">Password</label> -->
+              <input type="password" class="form-control" id="password" name="password" minlength="5" maxlength="10" placeholder="Password" required readonly>
+              <label for="showPasswordCheckbox"><input type="checkbox" id="showPasswordCheckbox" onclick="showPassword()">Show Password</label>
+            </div>
+            <!-- <div class="mb-3 form-check">
+            </div> -->
+        
+            <button type="submit" id="btnSave" class="btn btn-success me-1">Save</button>
+            <a href="/" type="button" class="btn btn-secondary me-1">Back</a>
+            <a href="/signup" type="button" class="btn btn-danger">Reset</a>
+            <br><br>
+          </form>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3"></div>
+  </div> 
+    
+
+<script>   
+ function restrictAlphabets(e){
+       var x = e.which || e.keycode;
+        if((x>=48 && x<=57))
+            return true;
+        else
+            return false;
+   }
+$(document).ready(function(){  
+    $("#username").on("change", function()
+        {  
+            var UserID = $(this).val(); 
+            $("#password").val(UserID);
+        });
+});
+
+
+    // $("#btnSave").click(function()
+    // {
+    //     if($("#fname").val().replace(/^\s+|\s+$/g, "").length === 0)
+    //     {
+    //         $("#errorP").html(`*Please Enter First Name`);
+    //     }
+    //     else if($("#lname").val().replace(/^\s+|\s+$/g, "").length === 0)
+    //     {
+    //         $("#errorP").html(`*Please Enter Last Name`);
+    //     }
+    //     else if($("#dateofjoin").val().replace(/^\s+|\s+$/g, "").length === 0)
+    //     {
+    //         $("#errorP").html(`*Please Enter Date of Joining`);
+    //     }
+    //     else if($("#designation").val().replace(/^\s+|\s+$/g, "").length === 0)
+    //     {
+    //         $("#errorP").html(`*Please Enter Designation`);
+    //     }
+    //     else if($("#email").val().replace(/^\s+|\s+$/g, "").length === 0)
+    //     {
+    //         $("#errorP").html(`*Please Enter Email`);
+    //     }
+    //     else if($("#username").val().replace(/^\s+|\s+$/g, "").length === 0)
+    //     {
+    //         $("#errorP").html(`*Please Enter Username`);
+    //     }
+    //     else if($("#password").val().replace(/^\s+|\s+$/g, "").length === 0)
+    //     {
+    //         $("#errorP").html(`*Please Enter Password`);
+    //     }
+    //     else if($("#password").val().replace(/^\s+|\s+$/g, "").length != 0)
+    //     {
+    //         if($("#password").val().replace(/^\s+|\s+$/g, "").length < 5)
+    //         {
+    //             $("#errorP").html(`*Password must be at least 5 characters`);
+    //         }
+    //     }
+    //     else
+    //     {
+    //         $("#errorP").remove();
+    //     }
+    // });
+
+
+
+    function showPassword()
+    {
+        var x = document.getElementById("password");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
+
+    </script>
+
+
+<%-  include ('./partials/footer');  -%>
+
+
+

@@ -1,0 +1,302 @@
+<%- include ('./partials/header'); -%>
+
+<div class="landing d-flex align-content-center">
+  <div class="col-sm-6 mt-4 ">
+    <h1 class="text-white mt-3 mb-2 d-flex justify-content-center">Welcome To EezahTech</h1>
+    <canvas id="canv" width="500" height="480"></canvas>
+  </div>
+  <div class="col-sm-3 justify-content-center align-self-center">
+    <!-- For SUccess or Error -->
+    <%- include ('./partials/SuccessError'); -%>
+    <div id="errorDiv"></div>
+    <!-- <div class="container"> -->
+      <h3 class="text-white">Mark Attendance Here</h3>
+      <form id="myForm" class="mt-4">
+        <div class="mb-3"> 
+          <input
+            type="text"
+            class="form-control"
+            id="userID"
+            name="username" 
+            placeholder="User ID" 
+            autocomplete="off"
+            onkeypress='return restrictAlphabets(event)'
+            required
+          />
+        </div>
+        <!-- <div> 
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            placeholder="Password"
+            required
+          />
+          <label class="text-white" for="showPasswordCheckbox"><input type="checkbox" id="showPasswordCheckbox" onclick="showPassword()">Show Password</label>       
+        </div> -->
+        <!-- <div class="mb-3 form-check">
+        </div> -->
+        
+        <div class="mt-4">
+          <button id="loginBtn" type="submit" class="btn btn-primary">
+            Check In
+          </button>
+          <button id="logoutBtn" type="submit" class="btn btn-primary">
+            Check Out
+          </button>
+        </div>
+
+        <div class="mt-2 text-white">
+          <span>
+            Not a member?
+            <a href="/signup">SignUp</a>
+          </span>
+        </div>
+      </form>
+    <!-- </div> -->
+  </div>
+</div>
+
+<script>   
+    function restrictAlphabets(e){
+       var x = e.which || e.keycode;
+   	if((x>=48 && x<=57))
+   		return true;
+   	else
+   		return false;
+   }
+
+  //POST For Login
+  $("#loginBtn").on("click", function (e) {
+    if($("#userID").val() == '')
+    {
+      var err = `<div class="alert alert-danger" role="alert">Put User ID</div>`;
+      // $('#errorDiv').show();
+      $("#errorDiv").html(err);
+      // setTimeout(function() {
+      //   $('#errorDiv').hide();
+      // }, 3000);
+    }
+    else
+    {
+    let obj = {};
+    obj.username = $("#userID").val();
+    // obj.password = $("#password").val();
+    // console.log(obj);
+    //stops the default action of an element from happening
+    e.preventDefault();
+    $.ajax({
+      url: "/loginBtn",
+      type: "POST",
+      //Serialization means to convert an object into that string
+      data: obj,
+      success: function (data) {
+        var _html = "";
+        if(typeof(data) == "object")
+        {
+          _html = `<div id="errorDiv" class="alert alert-danger" role="alert">${data.message}</div>`;
+          // $('#errorDiv').show();
+          $("#errorDiv").html(_html);
+          // setTimeout(function() {
+          //   $('#errorDiv').hide();
+          // }, 3000);
+        }
+        else
+        {
+          window.location.href = data;
+        }
+      },
+    });
+  }
+  });
+
+  //POST For Logout
+  $("#logoutBtn").on("click", function (e) {
+    if($("#userID").val() == '')
+    {
+      var err = `<div id="errorDiv" class="alert alert-danger" role="alert">Put User ID</div>`;
+      // $('#errorDiv').show();
+      $("#errorDiv").html(err);
+      // setTimeout(function() {
+      //       $('#errorDiv').hide();
+      // }, 3000);
+    }
+    else
+    {
+    let obj = {};
+    obj.username = $("#userID").val();
+    // obj.password = $("#password").val();
+    // console.log(obj);
+    //stops the default action of an element from happening
+    e.preventDefault();
+    $.ajax({
+      url: "/logoutBtn",
+      type: "POST",
+      //Serialization means to convert an object into that string
+      data: obj,
+      success: function (data) {
+        var _html = "";
+        if(typeof(data) == "object")
+        {
+          _html = `<div id="errorDiv" class="alert alert-danger" role="alert">${data.message}</div>`;
+          // $('#errorDiv').show();
+          $("#errorDiv").html(_html);
+          // setTimeout(function() {
+          //   $('#errorDiv').hide();
+          // }, 3000);
+        }
+        else
+        {
+          window.location.href = data;
+        } 
+      },
+    });
+   }
+  });
+
+
+//Show Password
+function showPassword()
+      {
+          var x = document.getElementById("password");
+          if (x.type === "password") {
+              x.type = "text";
+          } else {
+              x.type = "password";
+          }
+      }
+
+
+
+  //CLock
+var c = document.getElementById("canv");
+var $value = c.getContext("2d");
+var ang = 0;
+var secondsColor = "hsla(180, 85%, 5%, .7)";
+var minutesColor = "hsla(180, 95%, 15%, 1)";
+var hoursColor = "hsla(180, 75%, 25%, 1)";
+var currentHr;
+var currentMin;
+var currentSec;
+var currentMillisec;
+var t = setInterval("updateTime()", 50);
+
+function updateTime() {
+  var currentDate = new Date();
+  var g = $value.createRadialGradient(250, 250, 0.5, 250, 250, 250);
+  g.addColorStop(0, "hsla(180, 55%, 8%, 1)");
+  g.addColorStop(1, "hsla(180, 95%, 15%, 1)");
+  $value.fillStyle = g;
+  $value.fillRect(0, 0, c.width, c.height);
+  currentSec = currentDate.getSeconds();
+  currentMillisec = currentDate.getMilliseconds();
+  currentMin = currentDate.getMinutes();
+  currentHr = currentDate.getHours();
+  if (currentHr == 00) {
+    //if midnight (00 hours) hour = 12
+    currentHr = 12;
+  } else if (currentHr >= 13) {
+    //convert military hours at and over 1300 (1pm) to regular hours by subtracting 12.
+    currentHr -= 12;
+  }
+  drawSeconds();
+  drawMinutes();
+  drawHours();
+  var realTime =
+    currentHr + ":" + numPad0(currentMin) + ":" + numPad0(currentSec);
+
+  /*Here is the selected option of creating the text within the pie canvas elemenet */
+
+  var textPosX = 250 - $value.measureText(realTime).width / 2;
+  $value.shadowColor = "hsla(180, 100%, 5%, 1)";
+  $value.shadowBlur = 100;
+  $value.shadowOffsetX = 12;
+  $value.shadowOffsetY = 0;
+  $value.fillStyle = "hsla(255,255%,255%,.7)";
+  $value.font = "bold 1.6em 'Noto Serif', serif";
+  $value.fillText(realTime, textPosX, c.height / 2 + 50);
+
+  /* OR using a div to display the time (#time) where I pre-styled text with a long shadow using css...can't decide which I like better - but since this is a canvas demo....; (comment out the above text settings and uncomment the below) 
+
+  document.getElementById('time').innerHTML = realTime;
+*/
+}
+
+function drawSeconds() {
+  ang = 0.006 * (currentSec * 1000 + currentMillisec);
+  $value.fillStyle = secondsColor;
+  $value.beginPath();
+  $value.moveTo(250, 250);
+  $value.lineTo(250, 50);
+  $value.arc(250, 250, 200, calcDeg(0), calcDeg(ang), false);
+  $value.lineTo(250, 250);
+  $value.shadowColor = "hsla(180, 45%, 5%, .4)";
+  $value.shadowBlur = 15;
+  $value.shadowOffsetX = 15;
+  $value.shadowOffsetY = 15;
+  $value.fill();
+}
+
+function drawMinutes() {
+  ang =
+    0.0001 * (currentMin * 60 * 1000 + currentSec * 1000 + currentMillisec);
+  $value.fillStyle = minutesColor;
+  $value.beginPath();
+  $value.moveTo(250, 250);
+  $value.lineTo(250, 100);
+  $value.arc(250, 250, 150, calcDeg(0), calcDeg(ang), false);
+  $value.lineTo(250, 250);
+  $value.shadowColor = "hsla(180, 25%, 5%, .4)";
+  $value.shadowBlur = 15;
+  $value.shadowOffsetX = 15;
+  $value.shadowOffsetY = 15;
+  $value.fill();
+}
+
+function drawHours() {
+  ang =
+    0.000008333 *
+    (currentHr * 60 * 60 * 1000 +
+      currentMin * 60 * 1000 +
+      currentSec * 1000 +
+      currentMillisec);
+  if (ang > 360) {
+    ang -= 360;
+  }
+  $value.fillStyle = hoursColor;
+  $value.beginPath();
+  $value.moveTo(250, 250);
+  $value.lineTo(250, 150);
+  $value.arc(250, 250, 100, calcDeg(0), calcDeg(ang), false);
+  $value.lineTo(250, 250);
+  $value.shadowColor = "hsla(180, 45%, 5%, .4)";
+  $value.shadowBlur = 15;
+  $value.shadowOffsetX = 15;
+  $value.shadowOffsetY = 15;
+  $value.fill();
+}
+
+function calcDeg(deg) {
+  return (Math.PI / 180) * (deg - 90);
+}
+//handle zeros for minutes and seconds
+function numPad0(str) {
+  var cStr = str.toString();
+  if (cStr.length < 2) {
+    str = 0 + cStr;
+  }
+  return str;
+}
+window.addEventListener("resize", function () {
+  c.width = 500;
+  c.height = 480;
+});
+
+
+      
+</script>
+
+
+
+<%- include ('./partials/footer'); -%>

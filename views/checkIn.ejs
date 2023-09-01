@@ -1,0 +1,38 @@
+<%-  include ('./partials/header');  -%>
+
+
+
+<div class="w-100 mt-3 d-flex justify-content-center" style="background-color: hsla(180, 95%, 15%, 1);">
+    <nav class="navbar navbar-expand-sm">
+        <h2 class="text-white fs-2">
+            CheckIn Page
+        </h2>
+    </nav>
+</div>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <div class="rounded-3 border border-success border-3">
+                <h2 class="text-dark text-center"><u>Welcome! <b><%=currentUser.name%></b></u></h2>
+                        <div class="card text-dark">
+                            <div class="card-body">
+                                <p class="card-text"><strong>User ID:</strong> <%=currentUser.username%></p>
+                                <p class="card-text"><strong>Date of Joining:</strong> <%=currentUser.dateOfjoining%></p>
+                                <p class="card-text"><strong>Designation:</strong> <%=currentUser.designation%></p>
+                                <p class="card-text"><strong>CheckIn Time:</strong> <%=user.loginTime%></p>
+                                <p class="card-text"><strong>CheckIn Date:</strong> <%=loginDate%></p>
+                            </div>
+                        </div>
+                <div class="mt-2 mb-2">
+                    <a href="/logout" class="btn btn-primary">Back</a>
+                </div> 
+            </div>
+        </div>
+        <div class="col-3"></div>
+    </div>
+</div>
+
+
+
+<%-  include ('./partials/footer');  -%>

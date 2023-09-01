@@ -1,0 +1,132 @@
+<%-  include ('./partials/header');  -%>
+
+<div class="w-100 d-flex justify-content-center" style="background-color: hsla(180, 95%, 15%, 1);">
+    <nav class="navbar navbar-expand-sm">
+        <h2 class="text-white fs-2">
+            CheckOut Page
+        </h2>
+    </nav>
+</div>
+<div class="container mt-4">
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
+                <div class="rounded-3 border border-success border-3">
+                    <h2 class="text-dark text-center"><u>Bye! <b><%=currentUser.name%></b></u></h2>
+
+                    <div class="card text-dark">
+                        <div class="card-body">
+                            <p class="card-text"><strong>CheckIn Time:</strong>   <%=user.loginTime%></p>
+                            <p class="card-text"><strong>CheckIn Date:</strong>   <%=loginDate%></p>
+                            <p class="card-text"><strong>CheckOut Time:</strong>   <%=user.logoutTime%></p>
+                            <p class="card-text"><strong>CheckOut Date:</strong>   <%=logoutDate%></p>
+                            <h5 class="card-text"><strong>Total Time(hh:mm:ss):</strong>  <%=user.totalTime%></h5>
+                        </div>
+                    </div>
+                      
+                    <div class="mt-2 mb-2">
+                        <a href="/logout" class="btn btn-primary">Back</a>
+                        <a href="#historyTable"><button id="historyBtn" class="btn btn-primary">View History</button></a>
+                        <!-- <a href="/checkOut/change-password"><button id="changePass" class="btn btn-primary">Change Password</button></a> -->
+                   </div> 
+                </div>
+            </div>
+            <div class="col-3"></div>
+        </div>
+</div>
+
+
+
+<div id="historyTable" class="container w-75 mt-5 mb-5">
+    <h3 class="d-flex justify-content-center text-decoration-underline text-primary">Your History</h3>
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">No.</th>
+            <th scope="col">User ID</th>
+            <th scope="col">Email</th>
+            <th scope="col">CheckIn Date / Time</th>
+            <th scope="col">CheckOut Date / Time</th>
+            <th scope="col">Total Time(hh-mm-ss)</th>
+          </tr>
+        </thead>
+        <tbody id="tBody"> </tbody>
+      </table>
+</div>
+
+
+<script>
+$(document).ready(function () {
+
+        $("#historyTable").hide();
+        $("#historyBtn").on("click", (e) => {
+            $("#historyTable").show();
+         });
+
+        $.ajax({
+            url: "/loginEmployeHistory",
+            type: "GET",
+            success: function (data) {
+            // console.log(data);
+            // $("#tableBody").empty();
+            var count = 1;
+            var _html = "";
+            data.forEach(function (item) {
+                let setLoginDate = new Date(item.loginDate).toUTCString();
+                let setLogoutDate = new Date(item.logoutDate).toUTCString();
+                let loginD = setLoginDate.slice(0, 17);
+                let logoutD = setLogoutDate.slice(0, 17);
+                if(loginD == "Invalid Date")
+                {
+                    _html += `
+                        <tr>
+                        <td>${count}</td>
+                        <td>${item.username}</td>
+                        <td>${item.email}</td>
+                        <td> NA / ${item.loginTime}</td>
+                        <td>${logoutD} / ${item.logoutTime}</td>
+                        <td>${item.totalTime}</td>
+                        </tr>
+                    `;
+                  count++;
+                }
+                else
+                {
+                    _html += `
+                        <tr>
+                        <td>${count}</td>
+                        <td>${item.username}</td>
+                        <td>${item.email}</td>
+                        <td>${loginD} / ${item.loginTime}</td>
+                        <td>${logoutD} / ${item.logoutTime}</td>
+                        <td>${item.totalTime}</td>
+                        </tr>
+                    `;
+                count++;
+                }
+                
+            });
+
+            if(_html == "")
+            {
+                _html = `<tr>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>No Data to Show</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>`;
+            }
+            
+            $("#tBody").html(_html);
+        }
+  });
+
+
+});
+   
+</script>
+
+
+
+<%-  include ('./partials/footer');  -%>

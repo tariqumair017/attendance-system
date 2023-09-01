@@ -1,0 +1,215 @@
+<%- include ('./partials/adminHeader'); -%>
+
+
+<div class="container mt-2">
+    <nav aria-label="breadcrumb mt-5">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Admin</li>
+        <li class="breadcrumb-item"><a href="/history">History</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Leave Form</li>
+      </ol>
+    </nav>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3"></div>
+    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+        <div class="container404 mt-2"> 
+            <h4 class="text-center text-white">Leave Form</h4> 
+            <form class="row g-3 text-white">
+                <div id="errorMessage" class="text-warning"></div>
+                <div class="col-12">
+                  <label for="inputEmail4" class="form-label">Select Employee</label>
+                  <select id="uniqueEmployee" class="form-select" aria-label="Default select example">
+                    <option selected>Select</option>
+                  </select>
+                </div>
+                <div class="col-md-6 mt-4">
+                    <div class="form-check">
+                      <label class="form-check-label" for="halfDay">
+                        <input class="form-check-input" type="radio" name="leave" data-name="Half Day" id="halfDay">
+                        Half Day
+                      </label>
+                    </div> 
+                </div>
+                <div class="col-md-6 mt-4">
+                    <div class="form-check">
+                      <label class="form-check-label" for="fullDay">
+                        <input class="form-check-input" type="radio" name="leave" data-name="Full Day" id="fullDay">
+                        Full Day
+                      </label>
+                    </div> 
+                </div>
+               <div class="row mt-2" id="halfLeave">
+                    <div class="col-md-4">
+                        <label for="leaveDate" class="form-label">Leave Date</label>
+                        <input type="date" class="form-control" id="leaveDate">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="leaveTime" class="form-label">Leave Time</label>
+                        <input type="time" class="form-control" id="leaveTime">
+                    </div>
+                    <div class="col-md-4">
+                    <label for="inputState" class="form-label">First/Second Half</label>
+                    <select id="firstSecondHalf" class="form-select" aria-label="Default select example">
+                    <option selected>Select</option>
+                        <option>First Half</option>
+                        <option>Second Half</option>
+                    </select>
+                    </div>
+               </div>
+               <div class="row mt-2" id="fullLeave">
+                <p class="text-warning mb-0">*Both dates will be same for One Day leave</p>
+                  <div class="col-md-6">
+                    <label for="startDate" class="form-label">Start Date</label>
+                    <input type="date" class="form-control" id="startDate" placeholder="1234 Main St">
+                  </div>
+                  <div class="col-md-6">
+                      <label for="endDate" class="form-label">End Date</label>
+                      <input type="date" class="form-control" id="endDate" placeholder="1234 Main St">
+                  </div>
+               </div>
+                <div class="col-12">
+                    <label for="leaveType" class="form-label">Leave Type</label>
+                    <select id="leaveType" class="form-select" aria-label="Default select example">
+                      <option selected>Select</option>
+                      <option>Sick Leave</option>
+                      <option>Anual Leave</option>
+                      <option>Urgent Piece of Work</option>
+                    </select>
+                </div>
+                <div class="form-floating">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="reason" style="height: 100px"></textarea>
+                    <label class="text-dark" for="reason">Leave Reason</label>
+                  </div>
+                <div class="col-12 mb-2">
+                    <button id="submitBtn" type="button" class="btn btn-success">Submit</button>
+                    <a class="btn btn-danger" href="/history">Back</a>
+                </div>
+              </form> 
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3"></div>
+</div>  
+
+
+<script>
+
+    $(document).ready(function(){
+
+    $("#halfLeave").hide();
+    $("#fullLeave").hide();
+
+        $('#halfDay').change(function(){
+            $("#fullLeave").hide();
+            $("#halfLeave").show();
+           });
+        $('#fullDay').change(function(){
+            $("#halfLeave").hide();
+            $("#fullLeave").show();
+        });
+
+    //Validation
+    $("#submitBtn").click(function(e){
+        if($("#uniqueEmployee").val() == "Select")
+        {
+            $("#errorMessage").html(`*Please Select Employee `);
+        }
+        else if($('#halfDay').is(':checked') == false && $('#fullDay').is(':checked') == false) 
+        { 
+            $("#errorMessage").html(`*Please Select Full day or Half day `);
+        }
+        else if($('#halfDay').is(':checked') == true && $("#leaveDate").val() == '')
+        {
+            $("#errorMessage").html(`*Please Select Leave Date `);
+        }
+        else if($('#halfDay').is(':checked') == true && $("#leaveTime").val() == '')
+        {
+            $("#errorMessage").html(`*Please Select Leave Time `);
+        }
+        else if($('#halfDay').is(':checked') == true && $("#firstSecondHalf").val() == "Select")
+        {
+            $("#errorMessage").html(`*Please Select First Or Second Half `);
+        }
+        else if($('#fullDay').is(':checked') == true && $("#startDate").val() == '')
+        {
+            $("#errorMessage").html(`*Please Select Start Date `);
+        }
+        else if($('#fullDay').is(':checked') == true && $("#endDate").val() == '')
+        {
+            $("#errorMessage").html(`*Please Select End Date `);
+        }
+        else if($("#leaveType").val() == "Select")
+        {
+            $("#errorMessage").html(`*Please Select Leave Type `);
+        }
+        else if($("#reason").val().replace(/^\s+|\s+$/g, "").length === 0)
+        {
+            $("#errorMessage").html(`*Leave Reason Can Not be Empty`);
+        }
+        else
+        {
+            $("#errorMessage").remove();
+
+
+            let obj = {};
+            obj.username = $("#uniqueEmployee").val();
+            obj.HalfFullDay = $("input[name='leave']:checked").data('name');
+            if($('#halfDay').is(':checked') == true)
+            {
+                obj.leaveDate = $("#leaveDate").val();
+                obj.leaveTime = $("#leaveTime").val();
+                obj.FirstSecondHalf = $("#firstSecondHalf").val();
+            }
+            if($('#fullDay').is(':checked') == true)
+            {
+                obj.StartDate = $("#startDate").val();
+                obj.EndDate = $("#endDate").val();
+            }    
+            obj.leaveType = $("#leaveType").val();
+            obj.reason = $("#reason").val();
+            // console.log(obj);
+            //stops the default action of an element from happening
+            e.preventDefault();
+            $.ajax({
+            url: "/history/leave",
+            type: "POST",
+            //Serialization means to convert an object into that string
+            data: obj,
+            success: function (data) {
+                window.location.href = data;
+            },
+            });
+        }
+
+
+    });
+
+
+      getRequestforUniqueEmployee();
+   });
+
+
+  //Get All Unique Employee
+  function getRequestforUniqueEmployee()
+  { 
+    $.ajax({
+    url: "/uniqueEmployeeForLeave",
+    type: "GET",
+    success: function (data) {
+
+      //distinct(Unique or Prevent to repeate username) 
+    //   var flags = [], output = [], l = data.length, i;
+      for( i=0; i<data.length; i++) {
+        //   if( flags[data[i].username]) continue;
+        //   flags[data[i].username] = true;
+          var option = `<option>${data[i]}</option>`;
+          $("#uniqueEmployee").append(option);
+        }
+    },
+  });
+}
+
+</script>
+
+<%- include ('./partials/adminFooter'); -%>

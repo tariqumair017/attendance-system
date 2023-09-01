@@ -1,0 +1,103 @@
+@import url(https://fonts.googleapis.com/css?family=Noto+Serif:700);
+.landing{
+	margin: 0;
+	background: hsla(180, 95%, 15%, 1);
+	font-family: 'Noto Serif', serif;
+  overflow:hidden;
+  width: 100%;
+  height: 641px;
+
+}
+
+body
+{
+  overflow-x: hidden;
+}
+
+
+canvas {
+	left: 25%;
+	position: absolute;
+  font-size: 4em;
+	top : 55%;
+	transform :translate( -50%, -50% );
+}
+
+.container404 {
+  background-color: hsla(180, 95%, 15%, 1);
+  min-height: 60vh;
+  margin: 8vh 0;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px; 
+}
+
+.container404 .container404-back {
+  margin-top: 10px;
+  width: 15vw;
+}
+/* .table {
+  overflow: scroll;
+} */
+
+.tableContainer {
+  overflow-x: auto;
+  height: 50vh;
+}
+
+/* .table-wrapper {
+  max-height: 70vh;
+  overflow-x: auto;
+  display:inline-block;
+} */
+
+/* #time font styling if using a div instead of canvas to display text
+
+#time{
+	position: absolute;
+  margin-left:40vw;
+  margin-top:5%;
+	top: 0;
+	left: 0;
+	width: 500px;
+  color:hsla(255,255%,255%,0.7);
+  font-weight:bold;
+	text-align: center;
+	line-height: 500px;
+   z-index:1;
+  text-shadow:hsla(180, 85%, 5%, 1) 1px 1px,
+    hsla(180, 85%, 5%, .6) 2px 2px,
+    hsla(180, 85%, 5%, .6) 3px 3px,
+    hsla(180, 85%, 5%, .6) 4px 4px,
+    hsla(180, 85%, 5%, .6) 5px 5px,
+    hsla(180, 85%, 5%, .6) 6px 6px,
+    hsla(180, 85%, 5%, .6) 7px 7px,
+    hsla(180, 85%, 5%, .6) 8px 8px,
+    hsla(180, 85%, 5%, .6) 9px 9px,
+    hsla(180, 85%, 5%, .6) 11px 11px,
+    hsla(180, 85%, 5%, .6) 12px 12px,
+    hsla(180, 85%, 5%, .6) 13px 13px,
+    hsla(180, 85%, 5%, .6) 14px 14px,
+    hsla(180, 85%, 5%, .6) 15px 15px,
+    hsla(180, 85%, 5%, .6) 16px 16px,
+    hsla(180, 85%, 5%, .6) 17px 17px,
+    hsla(180, 85%, 5%, .6) 18px 18px,
+    hsla(180, 85%, 5%, .6) 19px 19px,
+    hsla(180, 85%, 5%, .6) 20px 20px,
+    hsla(180, 85%, 5%, .6) 21px 21px,
+    hsla(180, 85%, 5%, .6) 22px 22px,
+    hsla(180, 85%, 5%, .6) 23px 23px,
+    hsla(180, 85%, 5%, .6) 24px 24px,
+    hsla(180, 85%, 5%, .6) 25px 25px,
+    hsla(180, 85%, 5%, .6) 26px 26px,
+    hsla(180, 85%, 5%, .6) 27px 27px,
+    hsla(180, 85%, 5%, .6) 28px 28px,
+    hsla(180, 85%, 5%, .6) 29px 29px,
+    hsla(180, 85%, 5%, .6) 30px 30px;
+  
+}
+*/
